@@ -19,7 +19,7 @@ Next to each client we have 3 buttons delete, edit, details
 delete user
 ![delete](https://github.com/ch0556740056/Hadasim4/assets/117013381/5054051f-f925-4814-b2ba-fff913d973e5)
 update
-![update](https://github.com/ch0556740056/Hadasim4/assets/117013381/a941574e-b152-4c9f-9fe6-dc14f3ea397e)
+![update](https://github.com/ch0556740056/Hadasim4/assets/117013381/cb473410-65a3-4ee8-99c0-4d3f4edaf256)
 details
 ![detailsUser](https://github.com/ch0556740056/Hadasim4/assets/117013381/dffed67c-4afb-4976-9aa6-f3303e668581)
 
