@@ -14,7 +14,6 @@ function Users() {
       const response = await userService.deleteUser(users_list[userKey].tz);
       response = await diseaseService.deleteDisease(users_list[userKey].tz)
       response = await vaccinationService.deleteVaccination(users_list[userKey].tz)
-      console.log('User deleted successfully');
     } catch (error) {
       console.error('Error message:', error.message);
     }
@@ -23,7 +22,6 @@ function Users() {
       updatedList.splice(userKey, 1); // Remove the video at the specified index
       return updatedList; // Return the updated array
     });
-    console.log(users_list);
   }
   const editOneUser = async (user, disease, vaccinations) => {
     try {
@@ -38,15 +36,12 @@ function Users() {
     }
     try {
       const response = await userService.setUser(user.tz, user);
-      console.log('User update successfully');
     }
     catch (error) {
       console.error('Error message:', error.message);
     }
     try {
-      console.log("update user");
       const response = await diseaseService.setDisease(user.tz, disease);
-      console.log('User update successfully');
     }
     catch (error) {
       console.error('Error message:', error.message);
@@ -65,9 +60,9 @@ function Users() {
   const detailsOneUser = async (userKey) => {
 
     try {
-      console.log(users_list[userKey].tz);
       const vaccinationResponse = await vaccinationService.getVaccination(users_list[userKey].tz)
       const vaccinationDetails = await vaccinationResponse.data.vaccination
+      
       const vaccinationDetailsText = vaccinationDetails.map(vaccination => `
       date: ${new Date(vaccination.date).toISOString().split('T')[0]}, manufacturer: ${vaccination.manufacturer}`);
       const diseasesResponse = await diseaseService.getDisease(users_list[userKey].tz)
@@ -118,18 +113,18 @@ function Users() {
     }
   }
   const AddUser = async (user, disease, vaccination1, vaccination2, vaccination3, vaccination4) => {
-    console.log();
     if (/^\d{9}$/.test(user.tz)) {
       try {
         const response = await userService.addUser(user)
       } catch (error) {
         console.error('Error in AddUser:', error);
       }
-      if (disease.dateOfIllnes || disease.dateOfRecovery) {
+      if (disease.dateOfIllnes!=="" || disease.dateOfRecovery!=="") {
         const response = await diseaseService.addDisease(disease)
       }
       if (vaccination1.manufacturer != "") {
         try {
+          console.log(vaccination1);
           const response = await vaccinationService.addVaccination(vaccination1)
         } catch (error) {
           console.error('Error in AddVaccination:', error);
@@ -201,44 +196,73 @@ function Users() {
         const phone = document.getElementById('phone');
         const mobilePhone = document.getElementById('mobilePhone');
         const birthdate = document.getElementById('birthdate');
-        const startDate = document.getElementById('startDate');
-        const endDate = document.getElementById('endDate');
+
+        const vac1=document.getElementById('vaccinationDate1')
+        if (new Date(vac1.value) >= new Date()) {
+          vac1.value = "";
+        }
         const vaccination1 = {
           tz: document.getElementById('tz').value,
           manufacturer: document.getElementById('manufacturer1').value,
-          date: document.getElementById('vaccinationDate1').value
+          date: vac1.value
+        }
+        const vac2=document.getElementById('vaccinationDate2')
+        if (new Date(vac2.value) >= new Date()) {
+          vac2.value = "";
         }
         const vaccination2 = {
           tz: document.getElementById('tz').value,
           manufacturer: document.getElementById('manufacturer2').value,
-          date: document.getElementById('vaccinationDate2').value
+          date: vac2.value
+        }
+        const vac3=document.getElementById('vaccinationDate3')
+        if (new Date(vac3.value) >= new Date()) {
+          vac3.value = "";
         }
         const vaccination3 = {
           tz: document.getElementById('tz').value,
           manufacturer: document.getElementById('manufacturer3').value,
-          date: document.getElementById('vaccinationDate3').value
+          date:vac3.value
+        }
+        const vac4=document.getElementById('vaccinationDate4')
+        if (new Date(vac4.value) >= new Date()) {
+          vac4.value = "";
         }
         const vaccination4 = {
           tz: document.getElementById('tz').value,
           manufacturer: document.getElementById('manufacturer4').value,
-          date: document.getElementById('vaccinationDate4').value
+          date: vac4.value
         }
-        const disease = {
+        const dateOfIllness=document.getElementById('startDate')
+        if (new Date(dateOfIllness.value) >= new Date()) {
+          dateOfIllness.value = "";
+        }
+        const dateOfRecovery=document.getElementById('endDate')
+
+        if (new Date(dateOfRecovery.value) >= new Date()) {
+          dateOfRecovery.value = "";
+        }
+        if(dateOfRecovery.value !== ""&&dateOfIllness.value!==null&&dateOfRecovery.value<dateOfIllness.value){
+          dateOfRecovery.value = "";
+          dateOfIllness.value = "";
+        }
+
+        const disease ={
           tz: tz.value,
-          dateOfIllness: startDate.value,
-          dateOfRecovery: endDate.value
+          dateOfIllness: dateOfIllness.value,
+          dateOfRecovery: dateOfRecovery.value
         }
-        if (!/^\d{9}$/.test(phone.value)) {
-          phone.value = ""
-        }
-        if (!/^0\d{8}$/.test(mobilePhone.value)) {
-          mobilePhone.value = ""
-        }
+     
         const inputDate = new Date(birthdate.value); // התאריך שהוזן על ידי המשתמש
         const currentDate = new Date(); // תאריך היום הנוכחי
 
         if (inputDate >= currentDate) {
           birthdate.value = "";
+        }
+        if(!/^0\d{8}$/.test(phone.value)){
+          phone.value=""
+        }  if(!/^0\d{9}$/.test(mobilePhone.value)){
+          mobilePhone.value=""
         }
         const user = {
           firstName: fName.value,
@@ -251,7 +275,6 @@ function Users() {
           phone: phone.value,
           mobilePhone: mobilePhone.value
         };
-        console.log(user);
         return { user, disease, vaccination1, vaccination2, vaccination3, vaccination4 };
       },
     }).then((result) => {
@@ -266,7 +289,6 @@ function Users() {
     const vaccinationResponse = await vaccinationService.getVaccination(users_list[userKey].tz)
     const vaccinationDetails = await vaccinationResponse.data.vaccination
     let vac = ""
-
     const vaccinationDetailsText = vaccinationDetails.map(vaccination =>
       `date: ${new Date(vaccination.date).toISOString().split('T')[0]}, manufacturer: ${vaccination.manufacturer}</br>`)
 
@@ -283,10 +305,13 @@ function Users() {
     }
     let dateOfIllness = "0000-01-01";
     let dateOfRecovery = "0000-01-01";
-    if (diseasesResponse.data.disease) {
-      dateOfIllness = diseasesResponse.data.disease.dateOfIllness;
+    if (diseasesResponse.data.disease.dateOfIllness) {
+      dateOfIllness = new Date(diseasesResponse.data.disease.dateOfIllness).toISOString().split('T')[0];
+    }  
+    if (diseasesResponse.data.disease.dateOfRecovery) {
       dateOfRecovery = diseasesResponse.data.disease.dateOfRecovery;
     }
+
     Swal.fire({
       title: 'update User',
       html: `
@@ -344,23 +369,41 @@ function Users() {
         const endDate = document.getElementById('endDate');
         const vaccinations = [];
         for (let i = 0; i < 4 - vaccinationDetails.length; i++) {
-
+          const date=document.getElementById(`vaccinationDate${i}`)
+          if (new Date(date.value) >= new Date()) {
+            date.value = "";
+          }
           const vaccination = {
             tz: user.tz,
             manufacturer: document.getElementById(`manufacturer${i}`).value,
-            date: document.getElementById(`vaccinationDate${i}`).value
+            date: date.value
           }
           vaccinations.push({ vaccination });
         }
+        const dateOfIllness=document.getElementById('startDate')
+        if (new Date(dateOfIllness.value) >= new Date()) {
+          dateOfIllness.value = "";
+        }
+        const dateOfRecovery=document.getElementById('endDate')
+
+        if (new Date(dateOfRecovery.value) >= new Date()) {
+          dateOfRecovery.value = "";
+        }
+        if(dateOfRecovery.value !== ""&&dateOfIllness.value!==null&&dateOfRecovery.value<dateOfIllness.value){
+          dateOfRecovery.value = "";
+          dateOfIllness.value = "";
+        }
+
         const disease = {
           tz: user.tz,
-          dateOfIllness: startDate.value,
-          dateOfRecovery: endDate.value
+          dateOfIllness: dateOfIllness.value,
+          dateOfRecovery: dateOfRecovery.value
         }
-        if (!/^\d{9}$/.test(phone.value)) {
+
+        if (!/^\d{8}$/.test(phone.value)) {
           phone.value = ""
         }
-        if (!/^0\d{8}$/.test(mobilePhone.value)) {
+        if (!/^0\d{9}$/.test(mobilePhone.value)) {
           mobilePhone.value = ""
         }
         const inputDate = new Date(birthdate.value); // התאריך שהוזן על ידי המשתמש
@@ -384,7 +427,6 @@ function Users() {
         return { user1, disease, vaccinations };
       },
     }).then((result) => {
-      console.log(result);
       editOneUser(result.value.user1, result.value.disease, result.value.vaccinations)
     });
   }
@@ -394,11 +436,12 @@ function Users() {
   async function getUsers() {
     const users = await userService.getAllUsers();
     setUsers_list(users);
-    console.log(users);
   }
   return (
     <>
       <h1>list of our users: </h1>
+      <button onClick={openAddUserModal}>add user</button>
+
       {users_list?.map((user, index) => (
         <User
           userKey={index}
@@ -409,7 +452,6 @@ function Users() {
         />
       ))}
 
-      <button onClick={openAddUserModal}>add user</button>
     </>
   );
 }
