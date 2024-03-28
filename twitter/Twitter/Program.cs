@@ -90,7 +90,8 @@ namespace Twitter
                         switch (trigleChoice)
                         {
                             case 1:
-                                Console.WriteLine($"the perimeter of the triangle is: {height*width/2}");
+                                double d = Math.Sqrt(Math.Pow(width / 2, 2) + Math.Pow(height, 2));
+                                Console.WriteLine($"the perimeter of the triangle is: {d+d+width}");
                                 break;
                             case 2:
                                 if (width % 2 == 0 || width > 2 * height)

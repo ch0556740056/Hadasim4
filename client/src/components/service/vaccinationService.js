@@ -1,9 +1,8 @@
-import axios from 'axios';
 
 import instance from './instance';
 
 export default {
- 
+
   deleteVaccination: async (id) => {
     try {
       const result = await instance.delete(`/vaccinations/${id}`);
@@ -14,7 +13,7 @@ export default {
       throw error;
     }
   },
-  addVaccination:async(vaccination)=>{
+  addVaccination: async (vaccination) => {
     try {
       console.log(vaccination);
       const result = await instance.post(`/vaccinations`, vaccination);

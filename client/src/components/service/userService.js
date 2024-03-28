@@ -1,8 +1,8 @@
-import axios from 'axios';
 
 import instance from './instance';
 
 export default {
+
   getAllUsers: async () => {
     try {
       const result = await instance.get(`/users`);
@@ -13,7 +13,7 @@ export default {
       throw error;
     }
   },
-  addUser:async(user)=>{
+  addUser: async (user) => {
     try {
       console.log(user);
       const result = await instance.post(`/users`, user);
@@ -44,10 +44,10 @@ export default {
       throw error;
     }
   },
-  setUser: async (id, User) => {
+  setUser: async (id, user) => {
+    console.log(user);
     try {
-      console.log('setUser', { id, User });
-      const result = await instance.put(`/users/${id}`, { User });
+      const result = await instance.patch(`/users/${id}`, {  user });
       return result;
     } catch (error) {
       console.error('Error in setUser:', error);

@@ -1,15 +1,13 @@
-const express=require('express');
-const app=express();
+const express = require('express');
+const app = express();
 const morgan = require('morgan');
-const mongoose=require('mongoose');
-const usersRouters=require('./api/routers/users');
-const vaccinationsRouters=require('./api/routers/vaccinations');
-const diseasesRouters=require('./api/routers/diseases');
-//mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@identity.8lprpne.mongodb.net/?retryWrites=true&w=majority`,{
+const mongoose = require('mongoose');
+const usersRouters = require('./api/routers/users');
+const vaccinationsRouters = require('./api/routers/vaccinations');
+const diseasesRouters = require('./api/routers/diseases');
 
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@hadasim.labivhn.mongodb.net/?retryWrites=true&w=majority&appName=Hadasim`, {
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@hadasim.labivhn.mongodb.net/?retryWrites=true&w=majority&appName=Hadasim`,{
-  
 });
 
 mongoose.connection.on('connected', () => {
@@ -32,9 +30,9 @@ app.use((req, res, next) => {
 });
 
 //Routers
-app.use('/users',usersRouters);
-app.use('/diseases',diseasesRouters);
-app.use('/vaccinations',vaccinationsRouters);
+app.use('/users', usersRouters);
+app.use('/diseases', diseasesRouters);
+app.use('/vaccinations', vaccinationsRouters);
 
 
 // app.use((req, res, next) => {
@@ -62,4 +60,4 @@ app.use((err, req, res, next) => {
 })
 
 
-module.exports=app;
+module.exports = app;

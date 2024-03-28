@@ -1,10 +1,9 @@
-import axios from 'axios';
 
 import instance from './instance';
 
 export default {
- 
- 
+
+
   getDisease: async (id) => {
     try {
       const result = await instance.get(`/diseases/${id}`);
@@ -14,7 +13,7 @@ export default {
       throw error;
     }
   },
-  addDisease:async(disease)=>{
+  addDisease: async (disease) => {
     try {
       console.log(disease);
       const result = await instance.post(`/diseases`, disease);
@@ -25,25 +24,33 @@ export default {
       throw error;
     }
   },
-  // setUser: async (id, User) => {
-  //   try {
-  //     console.log('setUser', { id, User });
-  //     const result = await instance.put(`/users/${id}`, { User });
-  //     return result;
-  //   } catch (error) {
-  //     console.error('Error in setUser:', error);
-  //     throw error;
-  //   }
-  // },
-
   deleteDisease: async (id) => {
     try {
       const result = await instance.delete(`/diseases/${id}`);
       return result;
-    } 
+    }
     catch (error) {
       console.error('Error in delete diseases:', error);
       throw error;
     }
+  },
+  setDisease: async (id, disease) => {
+    try {
+      let result = ""
+      console.log((await instance.get(`/diseases/${id}`)).data.disease !== null);
+      if ((await instance.get(`/diseases/${id}`)).data.disease !== null) {
+        console.log("patch");
+        result = await instance.patch(`/diseases/${id}`, { disease });
+      }
+      else {
+        console.log("add");
+        result = await instance.post(`/diseases`,  disease );
+      }
+      return result;
+    } catch (error) {
+      console.error('Error in setDiseases:', error);
+      throw error;
+    }
   }
+
 };

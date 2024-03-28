@@ -2,7 +2,5 @@ button{
     margin-right:10px;
     color: white;
     background-color: brown;
-}
-h1{
-    color: brown;
+    border-radius: 5px;
 }
